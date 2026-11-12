@@ -40,13 +40,31 @@ Notebook: [notebooks/04_reason_codes.ipynb](notebooks/04_reason_codes.ipynb)
   "Duration" for a 36-month loan means the 36-month bin.
 - Saving accounts "little" appears as a reason for most applicants. That is a feature of this
   small dataset (1,000 rows). It does not generalise to other portfolios.
-- SHAP for the LightGBM challenger is not included. The plan requires approval for the `shap`
-  dependency.
+## SHAP for the LightGBM challenger (LendingClub, CR04b)
+
+Notebook: [notebooks/04b_shap_lendingclub.py](notebooks/04b_shap_lendingclub.py). Figures:
+`cr04b_shap_importance.png` and `cr04b_applicant_shap.png`.
+
+- Tree SHAP (`shap` 0.54.1) for the CR02 challenger, on the raw score (log-odds of good), for a
+  random sample of 50,000 test loans (2015 to 2016, seed 42).
+- Additivity: `base + sum(SHAP)` equals the raw score to within 1.5e-14.
+- Constraint check: all 7 monotone features (annual income, DTI, delinquencies, FICO, inquiries,
+  public records, revolving utilization) have a SHAP direction that agrees with their constraint.
+- Top global features: loan term, FICO, installment, annual income.
+- Applicant example: a defaulted loan with predicted good 0.246. Its top-3 reasons are revolving
+  balance, loan term, and annual income.
+
+Limitations: SHAP explains the model's score, not the true cause of default. Loan term and
+installment are strongly related, so their SHAP values share credit. The LightGBM challenger uses
+features that the German scorecard does not, so the two explanation methods do not compare directly.
 
 ## Reproduce
 
 ```bash
-pip install -e ../credit-scoring-core -e ../scorecard-woe-logistic -e .
+pip install -e ../credit-scoring-core -e ../scorecard-woe-logistic -e ../gbm-monotone-challenger -e .
 pytest
 make notebook
 ```
+
+The CR04b notebook needs the LendingClub file. See the CR05 [data README](../score-drift-monitoring/data/README.md).
+

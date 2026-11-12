@@ -9,9 +9,12 @@ requires-python = ">=3.12"
 dependencies = [
   "credit-scoring-core @ git+https://github.com/Patotricks15/credit-scoring-core",
   "scorecard-woe-logistic @ git+https://github.com/Patotricks15/scorecard-woe-logistic",
+  "gbm-monotone-challenger @ git+https://github.com/Patotricks15/gbm-monotone-challenger",
   "pandas==3.1.1",
   "numpy==2.5.4",
   "scikit-learn==1.9.1",
+  "lightgbm==4.7.0",
+  "shap==0.54.1",
   "matplotlib==3.11.2",
   "seaborn==0.13.2",
 ]
